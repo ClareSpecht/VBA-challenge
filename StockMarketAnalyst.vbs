@@ -35,7 +35,11 @@ Sub StockAnalyst()
                 Else
                     Cells(tickrow, 10).Interior.ColorIndex = 3
                 End If
-            Cells(tickrow, 11).Value = (closeprice - openprice) / openprice 'Input % Change Value
+            If openprice = 0 Then
+                Cells(tickrow, 11).Value = 0 'Dividing by 0 will throw error
+            Else
+                Cells(tickrow, 11).Value = (closeprice - openprice) / openprice 'Input % Change Value
+            End If
             Cells(tickrow, 11).NumberFormat = "0.00%" 'Format % Change as %
             Cells(tickrow, 12).Value = totalvol + Cells(i, 7).Value 'Input Total Volume for Ticker
             tickrow = tickrow + 1 'Moves to next row in I to prevent overwrite
