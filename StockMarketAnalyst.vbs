@@ -26,6 +26,7 @@ Sub StockAnalyst()
         Dim closeprice As Double
         openprice = ws.Cells(2, 3).Value
     
+        'Produce Moderate Solution Outputs
         For i = 2 To rownum
             'List Ticker Symbols
             If ws.Cells(i, 1).Value <> ws.Cells(i + 1, 1).Value Then
@@ -52,6 +53,53 @@ Sub StockAnalyst()
                 totalvol = totalvol + ws.Cells(i, 7).Value 'If ticker hasn't changed, add volume to total volume
             End If
         Next i
+        
+        'Produce Hard Solution Outputs
+        'Create Column/Row Headers
+        ws.Range("P1").Value = "Ticker"
+        ws.Range("Q1").Value = "Value"
+        ws.Range("O2").Value = "Greatest % Increase"
+        ws.Range("O3").Value = "Greatest % Decrease"
+        ws.Range("O4").Value = "Greatest Total Volume"
+        
+        'Determine number of tickers
+        ticknum = ws.Cells(Rows.Count, 9).End(xlUp).Row
+        
+        'Create variables to store outputs
+        Dim greatinc As Double
+        Dim greatdec As Double
+        Dim greatvol As Double
+        Dim tick1, tick2, tick3 As String
+        
+        'Initialize Variables
+        greatinc = ws.Cells(2, 11).Value
+        greatdec = ws.Cells(2, 11).Value
+        greatvol = ws.Cells(2, 12).Value
+        
+        'Compare % Values and Volumes
+        For i = 2 To ticknum
+            If ws.Cells(i, 11).Value >= greatinc Then
+                greatinc = ws.Cells(i, 11).Value
+                tick1 = ws.Cells(i, 9).Value
+            ElseIf ws.Cells(i, 11).Value <= greatdec Then
+                greatdec = ws.Cells(i, 11).Value
+                tick2 = ws.Cells(i, 9).Value
+            End If
+            If ws.Cells(i, 12).Value >= greatvol Then
+                greatvol = ws.Cells(i, 12).Value
+                tick3 = ws.Cells(i, 9).Value
+            End If
+        Next i
+    
+        'Output Results
+        ws.Range("Q2").Value = greatinc
+        ws.Range("Q2").NumberFormat = "0.00%"
+        ws.Range("P2").Value = tick1
+        ws.Range("Q3").Value = greatdec
+        ws.Range("Q3").NumberFormat = "0.00%"
+        ws.Range("P3").Value = tick2
+        ws.Range("Q4").Value = greatvol
+        ws.Range("P4").Value = tick3
     
     Next ws
 
